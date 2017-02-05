@@ -10,8 +10,11 @@ def f(x):  # Target Function
     return 0.5 * x + 1.25
 
 NUM = 20
-DIM = 3
-PLOT = True if DIM == 3 else PLOT = False
+DIM = 4
+if DIM == 3:
+    PLOT = True
+else:
+    PLOT = False
 w = np.random.rand(DIM) * 5
 matrix = np.random.rand(NUM, DIM) * 5
 y = [1] * NUM
@@ -57,13 +60,22 @@ t = 0
 c = True
 while c:
     n = check()
-    c = False if n == -1 else w = next_w(w, y[n], matrix[n])
+    if n == -1:
+        c = False
+    else:
+        w = next_w(w, y[n], matrix[n])
     t += 1
 print("t: {0}, w: {1}".format(t,w))
 
-def g(x):
-    return ((-w[1]/w[2]) * x) + (-w[0]/w[2])
+
+def g(vector_x):
+    s = 0
+    for i in range(len(vector_x) - 1):
+        s += (-w[i]/w[len(w) - 1]) * vector_x[i]
+    return s
+    #return ((-w[1]/w[2]) * vector_x[1]) + (-w[0]/w[2]) * vector_x[0]
 
 if PLOT:
-    plt.plot([0, 5], [g(0), g(5)])
-    plt.show()
+    plt.plot([0, 5], [g([1, 0, 0]), g([1, 5, 0])])  # In calling g(), the 0th value is 1, corresponding to w_0
+    plt.show()                                      # and the last value is not used in calculation, so is set as 0
+                                                    # This is just to properly display the line formed by g().
