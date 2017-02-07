@@ -6,7 +6,6 @@ from matplotlib import pyplot as plt
 from math import ceil
 import numpy as np
 
-
 NUM = 100  # Sample size
 DIM = 11  # Number of Dimensions
 w = []
@@ -75,6 +74,7 @@ def random_check():
         return misclass[ceil(np.random.rand(1) * (len(misclass) - 1))]
     else:
         return -1
+
 
 def g(vector_x):  # used to graph selected hypothesis g, which should emulate f with some error
     s = 0
