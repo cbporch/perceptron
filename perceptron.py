@@ -31,15 +31,15 @@ def setup():
         matrix[i][0] = 1
         if (f(matrix[i][1])) > matrix[i][2]:  # determine if point is above line/hyperplane formed by f()
             y[i] = -1  # correct y[i] if below line
-    if PLOT:
+    # if PLOT:
         # for x in range(NUM):
             # if y[x] == 1:
             #     plt.plot(matrix[x][1], matrix[x][2], 'Dg')
             # else:
             #     plt.plot(matrix[x][1], matrix[x][2], 'ro')
         # plt.plot([0,5], [f(0), f(5)], label='F')  # plot Target function f(x)
-        plt.ylabel('X_2 Axis')
-        plt.xlabel('X_1 Axis')
+        # plt.ylabel('X_2 Axis')
+        # plt.xlabel('X_1 Axis')
 
 
 def next_w(w, y, x):  # Perceptron update function
@@ -101,13 +101,16 @@ def run():
         #plt.show()                                  # and the last value is not used in calculation, so is set as 0
 
     return t                                                # This is just to properly display the line formed by g().
-plt.clf()
-j=[]
-for x in range(100):
-    j.append(run())
-plt.ylabel("Trials")
-plt.xlabel("Updates to converge")
 
-plt.hist(j, bins=30,data=j)
-plt.show()
-print(j)
+
+def run_trials(i=100):
+    j=[]
+    for x in range(i):
+        j.append(run())
+    plt.ylabel("Trials")
+    plt.xlabel("Updates to converge")
+    plt.hist(j, bins=40,data=j)
+    plt.show()
+    print(j)
+
+run_trials()
