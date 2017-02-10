@@ -7,10 +7,13 @@ from math import ceil
 import numpy as np
 
 NUM = 100  # Sample size
-DIM = 11  # Number of Dimensions
+DIM = 3  # Number of Dimensions
+ETA = 0.0001  # used for Adaline update
+test_data_size = 10000
 w = []
 y = []
-matrix = []
+training_matrix = []
+test_matrix = []
 if DIM == 3:
     PLOT = True  # whether or not to show the plot (only works in 2D)
 else:
@@ -22,29 +25,43 @@ def f(x):  # Target Function
 
 
 def setup():
-    global w, y, matrix
+    global w, y, training_matrix, test_matrix
     w = np.random.rand(DIM)  # randomly selected weights
-    matrix = np.random.rand(NUM, DIM) * 5  # randomly selected points
+    training_matrix = np.random.rand(NUM, DIM) * 10  # randomly selected points
+    test_matrix = np.random.rand(test_data_size, DIM)*10
     y = [1] * NUM  # default values for y
     for i in range(NUM):
-        matrix[i][0] = 1
-        if (f(matrix[i][1])) > matrix[i][2]:  # determine if point is above line/hyperplane formed by f()
+        training_matrix[i][0] = 1
+        if (f(training_matrix[i][1])) > training_matrix[i][2]:  # determine if point is above line formed by f()
             y[i] = -1  # correct y[i] if below line
     if PLOT:
-        for x in range(NUM):
-            if y[x] == 1:
-                plt.plot(matrix[x][1], matrix[x][2], 'Dg')
-            else:
-                plt.plot(matrix[x][1], matrix[x][2], 'ro')
-        plt.plot([0, 5], [f(0), f(5)], label='F')  # plot Target function f(x)
-        plt.ylabel('X_2 Axis')
-        plt.xlabel('X_1 Axis')
+        plot_points()
 
 
-def next_w(c, x):  # Perceptron update function
-    r = []
+def plot_points():
+    for x in range(NUM):
+        if y[x] == 1:
+            plt.plot(training_matrix[x][1], training_matrix[x][2], 'Dg')
+        else:
+            plt.plot(training_matrix[x][1], training_matrix[x][2], 'ro')
+    plt.plot([0, 10], [f(0), f(10)], 'b')  # plot Target function f(x)
+    plt.ylabel('X_2 Axis')
+    plt.xlabel('X_1 Axis')
+
+
+def perceptron_update(y_t, x):  # Perceptron update function
+    r = []  # w(t+1)
     for i in range(DIM):
-        r.append(w[i] + c*x[i])
+        r.append(w[i] + y_t * x[i])
+    return r
+
+
+def adaline_update(y_t, x):
+    global w
+    r = []
+    s_t = sign(inner_product(x))
+    for i in range(DIM):
+        r.append(w[i] + (ETA * (y_t - s_t) * x[i]))
     return r
 
 
@@ -52,23 +69,23 @@ def sign(k):  # returns 1 if k > 0, -1 otherwise
     return 1 if float(k) > 0 else -1
 
 
-def perceptron(x):  # Inner Product/Dot Product of vectors w and x
-    return sign(sum(w[i] * x[i] for i in range(DIM)))
+def inner_product(x):  # Inner Product/Dot Product of vectors w and x
+    return sum(w[i] * x[i] for i in range(DIM))
 
 
 def check():  # verify if all points are classified correctly
-    global y, matrix
+    global y, training_matrix
     for n in range(NUM):
-        if y[n] != perceptron(matrix[n]):
+        if y[n]*inner_product(training_matrix[n]) <= 1:
             return n
     return -1
 
 
 def random_check():
-    global y, matrix
+    global y, training_matrix
     misclass = []
     for n in range(NUM):
-        if y[n] != perceptron(matrix[n]):
+        if y[n]*inner_product(training_matrix[n]) <= 1:
             misclass.append(n)
     if len(misclass) > 0:
         return misclass[ceil(np.random.rand(1) * (len(misclass) - 1))]
@@ -77,39 +94,66 @@ def random_check():
 
 
 def g(vector_x):  # used to graph selected hypothesis g, which should emulate f with some error
+    global w
     s = 0
     for i in range(len(vector_x) - 1):
         s += (-w[i]/w[len(w) - 1]) * vector_x[i]
     return s
 
 
-def run():
+def run_perceptron():
     global w
-    setup()
+    # setup()
     t = 0
     c = True
     while c:
         n = random_check()
-        if n == -1:
+        if n == -1 or t == 1000:
             c = False
         else:
-            w = next_w(y[n], matrix[n])
+            w = adaline_update(y[n], training_matrix[n])
         t += 1
         print("t: {0}, w: {1}".format(t, w))
     if PLOT:
-        plt.plot([0, 5], [g([1, 0, 0]), g([1, 5, 0])])  # In calling g(), the 0th value is 1, corresponding to w_0
-        plt.show()                                      # and the last value is not used in calculation, so is set as 0
-    return t                                            # This is just to properly display the line formed by g().
+        plt.plot([0, 10], [g([1, 0, 0]), g([1, 10, 0])], 'g')  # In calling g() the 0th value is 1, corresponding to w_0
+    # plt.show()                                      # and the last value is not used in calculation, so is set as 0
+    compare()
+    return t
 
 
 def run_trials(i=100):
     j = []
     for x in range(i):
-        j.append(run())
+        j.append(run_perceptron())
     plt.ylabel("Trials")
     plt.xlabel("Updates to converge")
     plt.hist(j, bins=30, data=j)
-    plt.show()
+    # plt.show()
     print(j)
 
-run_trials()
+
+def compare():
+    error = 0
+    ftest_y = [1]*test_data_size
+    gtest_y = [1]*test_data_size
+    for i in range(test_data_size):
+        test_matrix[i][0] = 1
+        if f(test_matrix[i][1]) > test_matrix[i][2]:
+            ftest_y[i] = -1
+        if g(test_matrix[i]) > test_matrix[i][2]:
+            gtest_y[i] = -1
+        if gtest_y[i] != ftest_y[i]:
+            error += 1
+            plt.plot(test_matrix[i][1], test_matrix[i][2], 'Dy')
+    print("errors: {0}%, eta: {1}".format(100 * error/test_data_size, ETA))
+    plt.show()
+    return error
+
+eta_set = [100, 1, 0.01, 0.0001]
+setup()
+for e in range(len(eta_set)):
+    ETA = eta_set[e]
+    plot_points()
+    w = np.random.rand(DIM)
+    run_perceptron()
+    plt.show()
