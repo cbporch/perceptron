@@ -1,12 +1,12 @@
-"""
-Implementation of a Perceptron Learning Algorithm, that can be abstracted to
-various input sizes (NUM) or dimensions (DIM). Displays using pyplot.
-"""
 from math import ceil
 import numpy as np
 
 
 class Perceptron:
+    """
+    Implementation of a Perceptron Learning Algorithm, that can be abstracted to
+    various input sizes (NUM) or dimensions (DIM). Displays using pyplot.
+    """
 
     def __init__(self, dim, num, grph):
         self.DIM = dim
