@@ -4,6 +4,14 @@ from matplotlib import pyplot as plt
 import adaline
 
 
+def show_plot():
+    plt.show()
+
+
+def f(x):  # Target Function
+    return 0.5 * x + 1.25
+
+
 class Graph:
     w = []
     y = []
@@ -22,9 +30,6 @@ class Graph:
         else:
             self.PLOT = False
 
-    def f(self, x):  # Target Function
-        return 0.5 * x + 1.25
-
     def g(self, vector_x):  # used to graph selected hypothesis g, which should emulate f with some error
         s = 0
         for i in range(len(vector_x) - 1):
@@ -38,7 +43,7 @@ class Graph:
         self.y = [1] * self.NUM  # default values for y
         for i in range(self.NUM):
             self.training_matrix[i][0] = 1
-            if (self.f(self.training_matrix[i][1])) > self.training_matrix[i][2]:
+            if (f(self.training_matrix[i][1])) > self.training_matrix[i][2]:
                 # determine if point is above line formed by f()
                 self.y[i] = -1  # correct y[i] if below line
         if self.PLOT:
@@ -67,7 +72,7 @@ class Graph:
 
     def plot_f(self):
         plt.plot([self.line_start, self.line_end],
-                 [self.f(self.line_start), self.f(self.line_end)], 'b', linewidth=0.8)  # plot Target function f(x)
+                 [f(self.line_start), f(self.line_end)], 'b', linewidth=0.8)  # plot Target function f(x)
 
     def plot_g(self):
         plt.plot([self.line_start, self.line_end],
@@ -93,7 +98,7 @@ class Graph:
         gtest_y = [1] * data_size
         for i in range(data_size):
             m[i][0] = 1
-            if self.f(m[i][1]) > m[i][2]:
+            if f(m[i][1]) > m[i][2]:
                 ftest_y[i] = -1
             if self.g(m[i]) > m[i][2]:
                 gtest_y[i] = -1
@@ -107,6 +112,3 @@ class Graph:
     def run_etas(self, ada):
         self.plot_points()
         self.w = np.random.rand(ada.DIM)
-
-    def show_plot(self):
-        plt.show()

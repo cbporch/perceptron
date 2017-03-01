@@ -9,8 +9,8 @@ class Adaline(Perceptron):
     """
     ETA = 1
 
-    def __init__(self, dim, num, eta):
-        Perceptron.__init__(self, dim, num)
+    def __init__(self, dim, num, grph, eta):
+        Perceptron.__init__(self, dim, num, grph)
         self.ETA = eta
 
     def update(self, y_t, x):

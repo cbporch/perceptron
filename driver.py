@@ -4,7 +4,7 @@ from perceptron import Perceptron
 
 DIM = 3
 NUM = 1000
-grph = Graph(DIM,NUM)
+grph = Graph(DIM, NUM)
 grph.gen_semicirc_points(thk=5, rad=10, sep=5)
 per = Perceptron(DIM, NUM, grph)
 
@@ -41,7 +41,7 @@ def run_trials(i=100):
 def test_etas():
     eta_set = [100, 1, 0.01, 0.0001]
     for e in range(len(eta_set)):
-        ada = Adaline.__init(DIM,NUM,e)
+        ada = Adaline(DIM, NUM, grph, e)
         per.grph.run_etas(ada)
         run_model(ada)
         per.grph.show_plot()
