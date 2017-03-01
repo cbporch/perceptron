@@ -4,14 +4,6 @@ from matplotlib import pyplot as plt
 import adaline
 
 
-def show_plot():
-    plt.show()
-
-
-def f(x):  # Target Function
-    return 0.5 * x + 1.25
-
-
 class Graph:
     w = []
     y = []
@@ -29,6 +21,10 @@ class Graph:
             self.PLOT = True  # whether or not to show the plot (only works in 2D)
         else:
             self.PLOT = False
+
+    @staticmethod
+    def f(x):  # Target Function
+        return 0.5 * x + 1.25
 
     def g(self, vector_x):  # used to graph selected hypothesis g, which should emulate f with some error
         s = 0
@@ -58,12 +54,12 @@ class Graph:
         for i in range(int(self.NUM / 2)):
             angle = np.random.rand() * np.pi
             top_matrix.append([1,
-                               np.cos(angle) * rad + (thk * np.random.rand()),
-                               np.sin(angle) * rad + (thk * np.random.rand())])
+                               np.cos(angle) * (rad + thk * np.random.rand()),
+                               np.sin(angle) * (rad + thk * np.random.rand())])
             angle = np.random.rand() * np.pi + np.pi
             bot_matrix.append([1,
-                               rad + np.cos(angle) * rad + (thk * np.random.rand()),
-                               np.sin(angle) * rad + (thk * np.random.rand()) - sep])
+                               np.cos(angle) * (rad + thk * np.random.rand()) + (rad + thk/2),
+                               -sep + np.sin(angle) * (rad + thk * np.random.rand())])
         y1 = [1] * int(self.NUM / 2)  # default values for y
         y2 = [-1] * int(self.NUM / 2)
         self.training_matrix = top_matrix + bot_matrix
@@ -112,3 +108,7 @@ class Graph:
     def run_etas(self, ada):
         self.plot_points()
         self.w = np.random.rand(ada.DIM)
+
+    @staticmethod
+    def show_plot():
+        plt.show()
