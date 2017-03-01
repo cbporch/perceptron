@@ -5,7 +5,7 @@ from perceptron import Perceptron
 class Adaline(Perceptron):
     """
     Implementation of an Adaptive Linear Neuron, that can be abstracted to
-    various input sizes (NUM) or dimensions (DIM). Displays using pyplot.
+    various input sizes or dimensions. Displays using pyplot.
     """
     ETA = 1
 

@@ -4,8 +4,13 @@ import numpy as np
 
 class Perceptron:
     """
-    Implementation of a Perceptron Learning Algorithm, that can be abstracted to
-    various input sizes (NUM) or dimensions (DIM). Displays using pyplot.
+    Implementation of a Perceptron, using the Perceptron Learning Algorithm, that can be abstracted to
+    various input sizes or dimensions. Displays using pyplot.
+
+    Parameters:
+        dim: Dimension of data
+        num: number of datapoints
+        grph: Graph to fit
     """
 
     def __init__(self, dim, num, grph):
