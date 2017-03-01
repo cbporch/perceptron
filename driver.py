@@ -27,7 +27,7 @@ def run_model(p=per):
     return t
 
 
-def run_trials( i = 100):
+def run_trials(i=100):
     j = []
     for x in range(i):
         j.append(run_model())
