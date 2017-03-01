@@ -8,12 +8,10 @@ import numpy as np
 
 class Perceptron:
 
-    def __init__(self, dim, num):
+    def __init__(self, dim, num, grph):
         self.DIM = dim
         self.NUM = num
-        from graph import Graph
-        self.grph = Graph(dim, num)
-        self.grph.gen_semicirc_points(5, 10, 5)
+        self.grph = grph
 
     def update(self, y_t, x):  # Perceptron update function
         r = []  # w(t+1)

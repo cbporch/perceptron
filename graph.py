@@ -67,11 +67,11 @@ class Graph:
 
     def plot_f(self):
         plt.plot([self.line_start, self.line_end],
-                 [self.f(self.line_start), self.f(self.line_end)], 'b')  # plot Target function f(x)
+                 [self.f(self.line_start), self.f(self.line_end)], 'b', linewidth=0.8)  # plot Target function f(x)
 
     def plot_g(self):
         plt.plot([self.line_start, self.line_end],
-                 [self.g([1, self.line_start, 0]), self.g([1, self.line_end, 0])], 'g')
+                 [self.g([1, self.line_start, 0]), self.g([1, self.line_end, 0])], 'g', linewidth=0.8)
 
     def plot_points(self):
         for x in range(len(self.y)):

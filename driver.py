@@ -1,9 +1,12 @@
 from adaline import Adaline
+from graph import Graph
 from perceptron import Perceptron
 
 DIM = 3
-NUM = 11
-per = Perceptron(DIM, NUM)
+NUM = 1000
+grph = Graph(DIM,NUM)
+grph.gen_semicirc_points(thk=5, rad=10, sep=5)
+per = Perceptron(DIM, NUM, grph)
 
 
 def run_model(p=per):
