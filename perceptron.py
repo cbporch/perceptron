@@ -37,3 +37,20 @@ class Perceptron:
             return misclass[ceil(np.random.rand(1) * (len(misclass) - 1))]
         else:
             return -1
+
+    def fit(self):
+        t = 0
+        c = True
+        while c:
+            n = self.random_check()
+            if n == -1 or (not isinstance(self, Perceptron)) and t == 1000:
+                c = False
+            else:
+                self.grph.w = self.update(self.grph.y[n], self.grph.training_matrix[n])
+            t += 1
+            print("t: {0}, w: {1}".format(t, self.grph.w))
+        if self.grph.PLOT:
+            self.grph.plot_g()  # In calling g() the 0th value is 1, corresponding to w_0
+            self.grph.show_plot()
+        # and the last value is not used in calculation, so is set as 0
+        return t
