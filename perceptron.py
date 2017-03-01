@@ -13,7 +13,7 @@ class Perceptron:
         self.NUM = num
         from graph import Graph
         self.grph = Graph(dim, num)
-        self.grph.generate_semicirc_points(5,10,5)
+        self.grph.gen_semicirc_points(5, 10, 5)
 
     def update(self, y_t, x):  # Perceptron update function
         r = []  # w(t+1)
@@ -25,14 +25,14 @@ class Perceptron:
         return sum(self.grph.w[i] * x[i] for i in range(self.DIM))
 
     def check(self):  # verify if all points are classified correctly
-        for n in range(self.NUM):
+        for n in range(len(self.grph.y)):
             if self.grph.y[n] * self.inner_product(self.grph.training_matrix[n]) <= 1:
                 return n
         return -1
 
     def random_check(self):
         misclass = []
-        for n in range(self.NUM):
+        for n in range(len(self.grph.y)):
             if self.grph.y[n] * self.inner_product(self.grph.training_matrix[n]) <= 1:
                 misclass.append(n)
         if len(misclass) > 0:

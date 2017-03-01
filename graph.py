@@ -31,7 +31,7 @@ class Graph:
             s += (-1 * self.w[i] / self.w[len(self.w) - 1]) * vector_x[i]
         return s
 
-    def generate_points(self):
+    def gen_points(self):
         self.w = np.random.rand(self.DIM)  # randomly selected weights
         self.training_matrix = np.random.rand(self.NUM, self.DIM) * 10  # randomly selected points
         self.test_matrix = np.random.rand(self.test_data_size, self.DIM) * 10
@@ -45,7 +45,7 @@ class Graph:
             self.plot_f()
             self.plot_points()
 
-    def generate_semicirc_points(self, thk, rad, sep):
+    def gen_semicirc_points(self, thk, rad, sep):
         # self.w = np.random.rand(self.DIM)  # randomly selected weights
         self.w = [0] * self.DIM
         top_matrix = []
@@ -74,11 +74,11 @@ class Graph:
                  [self.g([1, self.line_start, 0]), self.g([1, self.line_end, 0])], 'g')
 
     def plot_points(self):
-        for x in range(self.NUM):
+        for x in range(len(self.y)):
             if self.y[x] == 1:
-                plt.plot(self.training_matrix[x][1], self.training_matrix[x][2], 'Dr')
+                plt.plot(self.training_matrix[x][1], self.training_matrix[x][2], 'Dr', ms=0.5)
             else:
-                plt.plot(self.training_matrix[x][1], self.training_matrix[x][2], 'bo')
+                plt.plot(self.training_matrix[x][1], self.training_matrix[x][2], 'bo', ms=0.5)
 
         plt.ylabel('X_2 Axis')
         plt.xlabel('X_1 Axis')

@@ -2,11 +2,11 @@ from adaline import Adaline
 from perceptron import Perceptron
 
 DIM = 3
-NUM = 2000
+NUM = 11
 per = Perceptron(DIM, NUM)
 
 
-def run_perceptron(p=per):
+def run_model(p=per):
     t = 0
     c = True
     while c:
@@ -27,7 +27,7 @@ def run_perceptron(p=per):
 def run_trials( i = 100):
     j = []
     for x in range(i):
-        j.append(run_perceptron())
+        j.append(run_model())
     per.grph.plt.ylabel("Trials")
     per.grph.plt.xlabel("Updates to converge")
     per.grph.plt.hist(j, bins=30, data=j)
@@ -40,7 +40,7 @@ def test_etas():
     for e in range(len(eta_set)):
         ada = Adaline.__init(DIM,NUM,e)
         per.grph.run_etas(ada)
-        run_perceptron(ada)
+        run_model(ada)
         per.grph.show_plot()
 
-run_perceptron()
+run_model()
