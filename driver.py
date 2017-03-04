@@ -11,13 +11,13 @@ per = Perceptron(DIM, NUM, grph)
 t, w = per.pocket_fit()
 print(w)
 
-
-for sep in np.arange(5, 5.2, 0.2):
-    print("============================")
-    print(sep)
-    grph.gen_semicirc_points(thk=5, rad=10, sep=sep)
-    per = Perceptron(DIM, NUM, grph)
-    per.fit()
+def sep_change():
+    for sep in np.arange(5, 5.2, 0.2):
+        print("============================")
+        print(sep)
+        grph.gen_semicirc_points(thk=5, rad=10, sep=sep)
+        per = Perceptron(DIM, NUM, grph)
+        per.fit()
 
 
 def run_trials(i=100):

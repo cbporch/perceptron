@@ -74,8 +74,8 @@ class Perceptron:
         x_iteration = []
         y_err_in = []
         t = 0
-        best_w = [0,0,0]
-        lowest_err = sys.maxsize
+        best_w = [0, 0, 0]
+        lowest_err = 1
         has_err = True
         while has_err:
             x_iteration.append(t)
@@ -85,8 +85,8 @@ class Perceptron:
                 best_w = self.grph.w
             y_err_in.append(lowest_err)
             n = self.random_check()  # get a misclassed point
-            if n == -1 or t == 100000:
-                err = False
+            if n == -1 or t > 100000:
+                has_err = False
             else:
                 self.grph.w = self.update(self.grph.y[n], self.grph.training_matrix[n])
             t += 1

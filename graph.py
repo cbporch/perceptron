@@ -1,8 +1,9 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import plotly
-
+import setapi
 import adaline
+setapi.setup()
 
 
 class Graph:
@@ -109,10 +110,10 @@ class Graph:
 
     def plotly_pocket(self, x_iteration, y_err_in):
         data = [plotly.graph_objs.Scatter(
-                    x=x_iteration,
+                    x=np.arange(1, len(y_err_in) + 1),
                     y=y_err_in
                 )]
-        plotly.iplot(data)
+        plotly.plotly.plot(data)
 
     @staticmethod
     def show_plot():
