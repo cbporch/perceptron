@@ -1,5 +1,6 @@
 from math import ceil
 import numpy as np
+import sys
 
 
 class Perceptron:
@@ -30,7 +31,7 @@ class Perceptron:
     def get_misclassed(self):
         misclass = []
         for n in range(len(self.grph.y)):
-            if self.grph.y[n] * self.inner_product(self.grph.training_matrix[n]) <= 1:
+            if self.grph.y[n] * self.inner_product(self.grph.training_matrix[n]) <= 0:
                 misclass.append(n)
         if len(misclass) > 0:
             return misclass
@@ -68,3 +69,30 @@ class Perceptron:
             self.grph.plot_g()  # In calling g() the 0th value is 1, corresponding to w_0
             self.grph.show_plot()  # and the last value is not used in calculation, so is set as 0
         return t
+
+    def pocket_fit(self):
+        x_iteration = []
+        y_err_in = []
+        t = 0
+        best_w = [0,0,0]
+        lowest_err = sys.maxsize
+        has_err = True
+        while has_err:
+            x_iteration.append(t)
+            err = len(self.get_misclassed()) / self.NUM
+            if err < lowest_err:
+                lowest_err = err
+                best_w = self.grph.w
+            y_err_in.append(lowest_err)
+            n = self.random_check()  # get a misclassed point
+            if n == -1 or t == 100000:
+                err = False
+            else:
+                self.grph.w = self.update(self.grph.y[n], self.grph.training_matrix[n])
+            t += 1
+            print("t: {0}, E_in: {1}, w: {2}".format(t, lowest_err, best_w))
+        if self.grph.PLOT:
+            self.grph.plot_g()  # In calling g() the 0th value is 1, corresponding to w_0
+            self.grph.show_plot()  # and the last value is not used in calculation, so is set as 0
+        self.grph.plotly_pocket(x_iteration,y_err_in)
+        return t, best_w

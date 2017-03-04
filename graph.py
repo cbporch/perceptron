@@ -1,18 +1,18 @@
 import numpy as np
 from matplotlib import pyplot as plt
+import plotly
 
 import adaline
 
 
 class Graph:
-    w = []
+    w = []  # weights
     y = []
     training_matrix = []
     test_matrix = []
     test_data_size = 1000
-    PLOT = False
-    line_start = -10
-    line_end = 25
+    line_start = -15
+    line_end = 30
 
     def __init__(self, d, n):
         self.NUM = n
@@ -26,10 +26,10 @@ class Graph:
     def f(x):  # Target Function
         return 0.5 * x + 1.25
 
-    def g(self, vector_x):  # used to graph selected hypothesis g, which should emulate f with some error
-        s = 0
-        for i in range(len(vector_x) - 1):
-            s += (-1 * self.w[i] / self.w[len(self.w) - 1]) * vector_x[i]
+    def g(self, x):  # used to graph selected hypothesis g, which should emulate f with some error
+        if self.w[2] == 0:
+            return 0
+        s = -1 * ((self.w[0] / self.w[2]) + (self.w[1] / self.w[2]) * x)
         return s
 
     def gen_points(self):
@@ -51,7 +51,7 @@ class Graph:
         self.w = [0] * self.DIM
         top_matrix = []
         bot_matrix = []
-        for i in range(int(self.NUM / 2)):
+        for i in range(self.NUM):
             angle = np.random.rand() * np.pi
             top_matrix.append([1,
                                np.cos(angle) * (rad + thk * np.random.rand()),
@@ -60,10 +60,10 @@ class Graph:
             bot_matrix.append([1,
                                np.cos(angle) * (rad + thk * np.random.rand()) + (rad + thk/2),
                                -sep + np.sin(angle) * (rad + thk * np.random.rand())])
-        y1 = [1] * int(self.NUM / 2)  # default values for y
-        y2 = [-1] * int(self.NUM / 2)
-        self.training_matrix = top_matrix + bot_matrix
-        self.y = [*y1, *y2]
+        y1 = [1] * self.NUM  # default values for y
+        y2 = [-1] * self.NUM
+        self.training_matrix = [*top_matrix, *bot_matrix]
+        self.y = [*y2, *y1]
         self.plot_points()
 
     def plot_f(self):
@@ -72,21 +72,19 @@ class Graph:
 
     def plot_g(self):
         plt.plot([self.line_start, self.line_end],
-                 [self.g([1, self.line_start, 0]), self.g([1, self.line_end, 0])], 'g', linewidth=0.8)
+                 [self.g(self.line_start), self.g(self.line_end)], linewidth=0.8)
 
     def plot_points(self):
         for x in range(len(self.y)):
             if self.y[x] == 1:
-                plt.plot(self.training_matrix[x][1], self.training_matrix[x][2], 'Dr', ms=0.5)
+                plt.plot(self.training_matrix[x][1], self.training_matrix[x][2], 'Dr', ms=1)
             else:
-                plt.plot(self.training_matrix[x][1], self.training_matrix[x][2], 'bo', ms=0.5)
-
+                plt.plot(self.training_matrix[x][1], self.training_matrix[x][2], 'bo', ms=1)
         plt.ylabel('X_2 Axis')
         plt.xlabel('X_1 Axis')
 
     def show_adaline_error(self, ada):
         assert isinstance(ada, adaline.Adaline)
-
         data_size = self.test_data_size
         m = self.test_matrix
         error = 0
@@ -108,6 +106,13 @@ class Graph:
     def run_etas(self, ada):
         self.plot_points()
         self.w = np.random.rand(ada.DIM)
+
+    def plotly_pocket(self, x_iteration, y_err_in):
+        data = [plotly.graph_objs.Scatter(
+                    x=x_iteration,
+                    y=y_err_in
+                )]
+        plotly.iplot(data)
 
     @staticmethod
     def show_plot():
