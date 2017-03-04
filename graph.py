@@ -108,12 +108,19 @@ class Graph:
         self.plot_points()
         self.w = np.random.rand(ada.DIM)
 
-    def plotly_pocket(self, x_iteration, y_err_in):
+    def plotly_pocket(self, y_err_in):
+        t = np.arange(1, len(y_err_in) + 1)
+        e_in = y_err_in
         data = [plotly.graph_objs.Scatter(
-                    x=np.arange(1, len(y_err_in) + 1),
-                    y=y_err_in
+                    x=t,
+                    y=e_in
                 )]
-        plotly.plotly.plot(data)
+        layout = dict(title='Pocket Algorithm: Error over Time',
+                      xaxis=dict(title='Iterations (t)'),
+                      yaxis=dict(title='$E_in$'),
+                      )
+        fig = dict(data=data, layout=layout)
+        plotly.plotly.plot(fig, filename='Problem 3.3 c')
 
     @staticmethod
     def show_plot():

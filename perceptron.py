@@ -94,5 +94,5 @@ class Perceptron:
         if self.grph.PLOT:
             self.grph.plot_g()  # In calling g() the 0th value is 1, corresponding to w_0
             self.grph.show_plot()  # and the last value is not used in calculation, so is set as 0
-        self.grph.plotly_pocket(x_iteration,y_err_in)
+        self.grph.plotly_pocket(y_err_in)
         return t, best_w
