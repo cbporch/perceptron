@@ -9,9 +9,10 @@ class Adaline(Perceptron):
     """
     ETA = 1
 
-    def __init__(self, dim, num, grph, eta):
+    def __init__(self, dim, num, grph, eta, max_t):
         Perceptron.__init__(self, dim, num, grph)
         self.ETA = eta
+        self.max_t = max_t
 
     def update(self, y_t, x):
         r = []
@@ -19,3 +20,20 @@ class Adaline(Perceptron):
         for i in range(self.DIM):
             r.append(self.grph.w[i] + (self.ETA * (y_t - s_t) * x[i]))
         return r
+
+    def fit(self):
+        t = 0
+        c = True
+        while c:
+            n = self.random_check()
+            if n == -1 or t == self.max_t:
+                c = False
+            else:
+                self.grph.w = self.update(self.grph.y[n], self.grph.training_matrix[n])
+            t += 1
+            print("t: {0}, w: {1}".format(t, self.grph.w))
+        if self.grph.PLOT:
+            self.grph.plot_g()  # In calling g() the 0th value is 1, corresponding to w_0
+            self.grph.show_plot()
+        # and the last value is not used in calculation, so is set as 0
+        return t

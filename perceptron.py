@@ -27,6 +27,16 @@ class Perceptron:
     def inner_product(self, x):  # Inner Product/Dot Product of vectors w and x
         return sum(self.grph.w[i] * x[i] for i in range(self.DIM))
 
+    def get_misclassed(self):
+        misclass = []
+        for n in range(len(self.grph.y)):
+            if self.grph.y[n] * self.inner_product(self.grph.training_matrix[n]) <= 1:
+                misclass.append(n)
+        if len(misclass) > 0:
+            return misclass
+        else:
+            return -1
+
     def check(self):  # verify if all points are classified correctly
         for n in range(len(self.grph.y)):
             if self.grph.y[n] * self.inner_product(self.grph.training_matrix[n]) <= 1:
@@ -34,28 +44,27 @@ class Perceptron:
         return -1
 
     def random_check(self):
-        misclass = []
-        for n in range(len(self.grph.y)):
-            if self.grph.y[n] * self.inner_product(self.grph.training_matrix[n]) <= 1:
-                misclass.append(n)
-        if len(misclass) > 0:
-            return misclass[ceil(np.random.rand(1) * (len(misclass) - 1))]
-        else:
+        misclass = self.get_misclassed()
+        if misclass == -1:
             return -1
+        else:
+            return misclass[ceil(np.random.rand(1) * (len(misclass) - 1))]
+
+    def e_in(self):  # get current e_in for weights
+        return len(self.get_misclassed())/self.NUM
 
     def fit(self):
         t = 0
-        c = True
-        while c:
-            n = self.random_check()
-            if n == -1 or (not isinstance(self, Perceptron)) and t == 1000:
-                c = False
+        err = True
+        while err:
+            n = self.random_check()  # get a misclassed point
+            if n == -1:
+                err = False
             else:
                 self.grph.w = self.update(self.grph.y[n], self.grph.training_matrix[n])
             t += 1
             print("t: {0}, w: {1}".format(t, self.grph.w))
         if self.grph.PLOT:
             self.grph.plot_g()  # In calling g() the 0th value is 1, corresponding to w_0
-            self.grph.show_plot()
-        # and the last value is not used in calculation, so is set as 0
+            self.grph.show_plot()  # and the last value is not used in calculation, so is set as 0
         return t

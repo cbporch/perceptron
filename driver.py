@@ -24,7 +24,7 @@ def run_trials(i=100):
 def test_etas():
     eta_set = [100, 1, 0.01, 0.0001]
     for e in range(len(eta_set)):
-        ada = Adaline(DIM, NUM, grph, e)
+        ada = Adaline(DIM, NUM, grph, e, 1000)
         per.grph.run_etas(ada)
         ada.fit()
         per.grph.show_plot()

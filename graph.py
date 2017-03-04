@@ -39,7 +39,7 @@ class Graph:
         self.y = [1] * self.NUM  # default values for y
         for i in range(self.NUM):
             self.training_matrix[i][0] = 1
-            if (f(self.training_matrix[i][1])) > self.training_matrix[i][2]:
+            if (self.f(self.training_matrix[i][1])) > self.training_matrix[i][2]:
                 # determine if point is above line formed by f()
                 self.y[i] = -1  # correct y[i] if below line
         if self.PLOT:
@@ -68,7 +68,7 @@ class Graph:
 
     def plot_f(self):
         plt.plot([self.line_start, self.line_end],
-                 [f(self.line_start), f(self.line_end)], 'b', linewidth=0.8)  # plot Target function f(x)
+                 [self.f(self.line_start), self.f(self.line_end)], 'b', linewidth=0.8)  # plot Target function f(x)
 
     def plot_g(self):
         plt.plot([self.line_start, self.line_end],
@@ -94,7 +94,7 @@ class Graph:
         gtest_y = [1] * data_size
         for i in range(data_size):
             m[i][0] = 1
-            if f(m[i][1]) > m[i][2]:
+            if self.f(m[i][1]) > m[i][2]:
                 ftest_y[i] = -1
             if self.g(m[i]) > m[i][2]:
                 gtest_y[i] = -1
