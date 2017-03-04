@@ -8,8 +8,9 @@ NUM = 1000
 grph = Graph(DIM, NUM)
 grph.gen_semicirc_points(thk=5, rad=10, sep=-5)
 per = Perceptron(DIM, NUM, grph)
-t, w = per.pocket_fit()
-print(w)
+# t, w = per.pocket_fit()
+# print(w)
+
 
 def sep_change():
     for sep in np.arange(5, 5.2, 0.2):
@@ -47,8 +48,10 @@ def linear_regression():
     print(w)
     setattr(per.grph, 'w', w)
     grph.plot_g()
+    print(grph.e_in())
 
-# linear_regression()
+linear_regression()
+grph.show_plot()
 # print("{1}x + {0})".format(-grph.w[0]/grph.w[2], -grph.w[1]/grph.w[2]))
 #
 # per.fit()

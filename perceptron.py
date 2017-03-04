@@ -28,16 +28,6 @@ class Perceptron:
     def inner_product(self, x):  # Inner Product/Dot Product of vectors w and x
         return sum(self.grph.w[i] * x[i] for i in range(self.DIM))
 
-    def get_misclassed(self):
-        misclass = []
-        for n in range(len(self.grph.y)):
-            if self.grph.y[n] * self.inner_product(self.grph.training_matrix[n]) <= 0:
-                misclass.append(n)
-        if len(misclass) > 0:
-            return misclass
-        else:
-            return -1
-
     def check(self):  # verify if all points are classified correctly
         for n in range(len(self.grph.y)):
             if self.grph.y[n] * self.inner_product(self.grph.training_matrix[n]) <= 1:
@@ -45,14 +35,11 @@ class Perceptron:
         return -1
 
     def random_check(self):
-        misclass = self.get_misclassed()
+        misclass = self.grph.get_misclassed()
         if misclass == -1:
             return -1
         else:
             return misclass[ceil(np.random.rand(1) * (len(misclass) - 1))]
-
-    def e_in(self):  # get current e_in for weights
-        return len(self.get_misclassed())/self.NUM
 
     def fit(self):
         t = 0
@@ -85,7 +72,7 @@ class Perceptron:
                 best_w = self.grph.w
             y_err_in.append(lowest_err)
             n = self.random_check()  # get a misclassed point
-            if n == -1 or t > 100000:
+            if n == -1 or t >= 99999:
                 has_err = False
             else:
                 self.grph.w = self.update(self.grph.y[n], self.grph.training_matrix[n])

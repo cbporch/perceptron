@@ -116,11 +116,29 @@ class Graph:
                     y=e_in
                 )]
         layout = dict(title='Pocket Algorithm: Error over Time',
-                      xaxis=dict(title='Iterations (t)'),
+                      xaxis=dict(title='$Iterations (t)$'),
                       yaxis=dict(title='$E_in$'),
                       )
         fig = dict(data=data, layout=layout)
         plotly.plotly.plot(fig, filename='Problem 3.3 c')
+        plt.plot(t, e_in)
+        axes = plt.gca()
+        x1, x2, y1, y2 = plt.axis()
+        axes.set_ylim([0, y2])
+        plt.show()
+
+    def get_misclassed(self):
+        misclass = []
+        for n in range(len(self.y)):
+            if self.y[n] * np.inner(self.w, self.training_matrix[n]) <= 0:
+                misclass.append(n)
+        if len(misclass) > 0:
+            return misclass
+        else:
+            return -1
+
+    def e_in(self):  # get current e_in for weights
+        return len(self.get_misclassed())/self.NUM
 
     @staticmethod
     def show_plot():
