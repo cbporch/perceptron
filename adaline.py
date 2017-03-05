@@ -16,7 +16,7 @@ class Adaline(Perceptron):
 
     def update(self, y_t, x):
         r = []
-        s_t = np.sign(self.inner_product(x))
+        s_t = np.sign(np.inner(self.grph.w, x))
         for i in range(self.DIM):
             r.append(self.grph.w[i] + (self.ETA * (y_t - s_t) * x[i]))
         return r

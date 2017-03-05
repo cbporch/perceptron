@@ -1,4 +1,4 @@
-from adaline import Adaline
+import adaline
 from graph import Graph
 from perceptron import Perceptron
 import numpy as np
@@ -6,10 +6,8 @@ import numpy as np
 DIM = 3
 NUM = 1000
 grph = Graph(DIM, NUM)
-grph.gen_semicirc_points(thk=5, rad=10, sep=-5)
+grph.gen_semicirc_points(thk=5, rad=10, sep=2)
 per = Perceptron(DIM, NUM, grph)
-# t, w = per.pocket_fit()
-# print(w)
 
 
 def sep_change():
@@ -17,8 +15,8 @@ def sep_change():
         print("============================")
         print(sep)
         grph.gen_semicirc_points(thk=5, rad=10, sep=sep)
-        per = Perceptron(DIM, NUM, grph)
-        per.fit()
+        p = Perceptron(DIM, NUM, grph)
+        p.fit()
 
 
 def run_trials(i=100):
@@ -35,7 +33,7 @@ def run_trials(i=100):
 def test_etas():
     eta_set = [100, 1, 0.01, 0.0001]
     for e in range(len(eta_set)):
-        ada = Adaline(DIM, NUM, grph, e, 1000)
+        ada = adaline.Adaline(DIM, NUM, grph, e, 1000)
         per.grph.run_etas(ada)
         ada.fit()
         per.grph.show_plot()
@@ -51,8 +49,8 @@ def linear_regression():
     print(grph.e_in())
 
 linear_regression()
+# grph.shade()
 grph.show_plot()
 # print("{1}x + {0})".format(-grph.w[0]/grph.w[2], -grph.w[1]/grph.w[2]))
-#
 # per.fit()
 # print("{1}x + {0})".format(-grph.w[0]/grph.w[2], -grph.w[1]/grph.w[2]))

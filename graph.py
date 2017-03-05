@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 import plotly
 import setapi
 import adaline
+from sklearn.preprocessing import PolynomialFeatures
 setapi.setup()
 
 
@@ -138,8 +139,25 @@ class Graph:
             return -1
 
     def e_in(self):  # get current e_in for weights
-        return len(self.get_misclassed())/self.NUM
+        if self.get_misclassed() != -1:
+            return len(self.get_misclassed())/self.NUM
+        else:
+            return 0
 
     @staticmethod
     def show_plot():
         plt.show()
+
+    def shade(self):
+        x1 = np.arange(-15, 30, 0.7)
+        x2 = np.arange(-20, 15, 0.7)
+        for x_1 in x1:
+            for x_2 in x2:
+                if 1 == np.sign(np.inner(self.w, [1, x_1, x_2])):
+                    plt.plot(x_1, x_2, 'or', alpha=0.1)
+                else:
+                    plt.plot(x_1, x_2, 'ob', alpha=0.1)
+
+    def poly(self):
+        poly = PolynomialFeatures(3)
+
