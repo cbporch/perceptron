@@ -1,4 +1,3 @@
-import sys
 from numpy import ceil
 import numpy as np
 
