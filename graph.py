@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import plotly
+from plotly import graph_objs, plotly
 import setapi
 import adaline
 from sklearn.preprocessing import PolynomialFeatures
@@ -15,6 +15,7 @@ class Graph:
     test_data_size = 1000
     line_start = -15
     line_end = 30
+    polyDIM = 3
 
     def __init__(self, d, n):
         self.NUM = n
@@ -112,7 +113,7 @@ class Graph:
     def plotly_pocket(self, y_err_in):
         t = np.arange(1, len(y_err_in) + 1)
         e_in = y_err_in
-        data = [plotly.graph_objs.Scatter(
+        data = [graph_objs.Scatter(
                     x=t,
                     y=e_in
                 )]
@@ -121,7 +122,7 @@ class Graph:
                       yaxis=dict(title='$E_in$'),
                       )
         fig = dict(data=data, layout=layout)
-        plotly.plotly.plot(fig, filename='Problem 3.3 c')
+        plotly.plot(fig, filename='Problem 3.3 d')
         plt.plot(t, e_in)
         axes = plt.gca()
         x1, x2, y1, y2 = plt.axis()
@@ -149,15 +150,20 @@ class Graph:
         plt.show()
 
     def shade(self):
+        pol = PolynomialFeatures(self.polyDIM, include_bias=True)
         x1 = np.arange(-15, 30, 0.7)
         x2 = np.arange(-20, 15, 0.7)
         for x_1 in x1:
             for x_2 in x2:
-                if 1 == np.sign(np.inner(self.w, [1, x_1, x_2])):
+                if 1 == np.sign(np.inner(self.w, pol.fit_transform(np.array([[x_1, x_2]])))):
+                # if 1 == np.sign(np.inner(self.w, pol.fit_transform(np.array([[1, x_1, x_2]])))):
                     plt.plot(x_1, x_2, 'or', alpha=0.1)
                 else:
                     plt.plot(x_1, x_2, 'ob', alpha=0.1)
 
     def poly(self):
-        poly = PolynomialFeatures(3)
-
+        pol = PolynomialFeatures(self.polyDIM, include_bias=True)
+        m = [[x[1], x[2]] for x in self.training_matrix]
+        self.training_matrix = pol.fit_transform(m)
+        self.DIM = len(self.training_matrix[0])
+        self.w = np.random.rand(self.DIM)

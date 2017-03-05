@@ -3,11 +3,12 @@ from graph import Graph
 from perceptron import Perceptron
 import numpy as np
 
+
 DIM = 3
 NUM = 1000
 grph = Graph(DIM, NUM)
-grph.gen_semicirc_points(thk=5, rad=10, sep=2)
-per = Perceptron(DIM, NUM, grph)
+grph.gen_semicirc_points(thk=5, rad=10, sep=-5)
+per = Perceptron(grph)
 
 
 def sep_change():
@@ -41,16 +42,17 @@ def test_etas():
 
 def linear_regression():
     mat = np.array(per.grph.training_matrix)
-    print(np.linalg.pinv(mat))
     w = np.inner(np.linalg.pinv(mat), per.grph.y)
     print(w)
     setattr(per.grph, 'w', w)
     grph.plot_g()
     print(grph.e_in())
 
-linear_regression()
-# grph.shade()
-grph.show_plot()
-# print("{1}x + {0})".format(-grph.w[0]/grph.w[2], -grph.w[1]/grph.w[2]))
-# per.fit()
-# print("{1}x + {0})".format(-grph.w[0]/grph.w[2], -grph.w[1]/grph.w[2]))
+# grph.show_plot()
+grph.poly()
+per = Perceptron(grph)
+per.pocket_fit()
+print("pocket done")
+grph.shade()
+print("shade done")
+per.grph.show_plot()

@@ -1,4 +1,5 @@
-from math import ceil
+import sys
+from numpy import ceil
 import numpy as np
 
 
@@ -13,14 +14,14 @@ class Perceptron:
         grph: Graph to fit
     """
 
-    def __init__(self, dim, num, grph):
-        self.DIM = dim
-        self.NUM = num
+    def __init__(self, grph):
         self.grph = grph
+        self.DIM = grph.DIM
+        self.NUM = grph.NUM
 
     def update(self, y_t, x):  # Perceptron update function
         r = []  # w(t+1)
-        for i in range(self.DIM):
+        for i in range(self.grph.DIM):
             r.append(self.grph.w[i] + y_t * x[i])
         return r
 
@@ -29,7 +30,7 @@ class Perceptron:
 
     def check(self):  # verify if all points are classified correctly
         for n in range(len(self.grph.y)):
-            if self.grph.y[n] * np.inner(self.grph.w, self.grph.training_matrix[n]) <= 1:
+            if self.grph.y[n] * np.inner(self.grph.w, self.grph.training_matrix[n]) <= 0:
                 return n
         return -1
 
@@ -38,7 +39,7 @@ class Perceptron:
         if misclass == -1:
             return -1
         else:
-            return misclass[ceil(np.random.rand(1) * (len(misclass) - 1))]
+            return misclass[int(ceil(np.random.rand(1) * (len(misclass) - 1))[0])]
 
     def fit(self):
         t = 0
@@ -71,14 +72,14 @@ class Perceptron:
                 best_w = self.grph.w
             y_err_in.append(lowest_err)
             n = self.random_check()  # get a misclassed point
-            if n == -1 or t >= 999:
+            if n == -1 or t >= 99999:
                 has_err = False
             else:
                 self.grph.w = self.update(self.grph.y[n], self.grph.training_matrix[n])
             t += 1
-            print("t: {0}, E_in: {1}, w: {2}".format(t, lowest_err, best_w))
-        if self.grph.PLOT:
-            self.grph.plot_g()  # In calling g() the 0th value is 1, corresponding to w_0
+            print("t: {0}, Err_in: {1}%, w: {2}".format(t, lowest_err*100, best_w))
+        # if self.grph.PLOT:
+            # self.grph.plot_g()  # In calling g() the 0th value is 1, corresponding to w_0
             # self.grph.show_plot()  # and the last value is not used in calculation, so is set as 0
-        # self.grph.plotly_pocket(y_err_in)
+        self.grph.plotly_pocket(y_err_in)
         return t, best_w
