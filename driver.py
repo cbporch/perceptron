@@ -3,7 +3,6 @@ from graph import Graph
 from perceptron import Perceptron
 import numpy as np
 
-
 DIM = 3
 NUM = 1000
 grph = Graph(DIM, NUM)
@@ -16,7 +15,7 @@ def sep_change():
         print("============================")
         print(sep)
         grph.gen_semicirc_points(thk=5, rad=10, sep=sep)
-        p = Perceptron(DIM, NUM, grph)
+        p = Perceptron(grph)
         p.fit()
 
 
@@ -34,7 +33,7 @@ def run_trials(i=100):
 def test_etas():
     eta_set = [100, 1, 0.01, 0.0001]
     for e in range(len(eta_set)):
-        ada = adaline.Adaline(DIM, NUM, grph, e, 1000)
+        ada = adaline.Adaline(grph, e, 1000)
         per.grph.run_etas(ada)
         ada.fit()
         per.grph.show_plot()
@@ -48,11 +47,18 @@ def linear_regression():
     grph.plot_g()
     print(grph.e_in())
 
+
 # grph.show_plot()
+original = grph.training_matrix
 grph.poly()
-per = Perceptron(grph)
+# linear_regression()
+setattr(per, 'grph', grph)
+grph.show_plot()  # clear graph
 per.pocket_fit()
 print("pocket done")
+setattr(grph, 'training_matrix', original)
 grph.shade()
 print("shade done")
+
+grph.plot_points()
 per.grph.show_plot()

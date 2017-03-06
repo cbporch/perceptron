@@ -4,6 +4,7 @@ from plotly import graph_objs, plotly
 import setapi
 import adaline
 from sklearn.preprocessing import PolynomialFeatures
+
 setapi.setup()
 
 
@@ -61,7 +62,7 @@ class Graph:
                                np.sin(angle) * (rad + thk * np.random.rand())])
             angle = np.random.rand() * np.pi + np.pi
             bot_matrix.append([1,
-                               np.cos(angle) * (rad + thk * np.random.rand()) + (rad + thk/2),
+                               np.cos(angle) * (rad + thk * np.random.rand()) + (rad + thk / 2),
                                -sep + np.sin(angle) * (rad + thk * np.random.rand())])
         y1 = [1] * self.NUM  # default values for y
         y2 = [-1] * self.NUM
@@ -114,15 +115,15 @@ class Graph:
         t = np.arange(1, len(y_err_in) + 1)
         e_in = y_err_in
         data = [graph_objs.Scatter(
-                    x=t,
-                    y=e_in
-                )]
+            x=t,
+            y=e_in
+        )]
         layout = dict(title='Pocket Algorithm: Error over Time',
                       xaxis=dict(title='$Iterations (t)$'),
                       yaxis=dict(title='$E_in$'),
                       )
         fig = dict(data=data, layout=layout)
-        plotly.plot(fig, filename='Problem 3.3 d')
+        plotly.plot(fig, filename='Problem 3.3 d 2d')
         plt.plot(t, e_in)
         axes = plt.gca()
         x1, x2, y1, y2 = plt.axis()
@@ -141,7 +142,7 @@ class Graph:
 
     def e_in(self):  # get current e_in for weights
         if self.get_misclassed() != -1:
-            return len(self.get_misclassed())/self.NUM
+            return len(self.get_misclassed()) / self.NUM
         else:
             return 0
 
@@ -150,20 +151,22 @@ class Graph:
         plt.show()
 
     def shade(self):
-        pol = PolynomialFeatures(self.polyDIM, include_bias=True)
-        x1 = np.arange(-15, 30, 0.7)
-        x2 = np.arange(-20, 15, 0.7)
+        pol = PolynomialFeatures(self.polyDIM, include_bias=False)
+        x1 = np.arange(min(x[1] for x in self.training_matrix),
+                       max(x[1] for x in self.training_matrix), 0.7)
+        x2 = np.arange(min(x[2] for x in self.training_matrix),
+                       max(x[2] for x in self.training_matrix), 0.7)
         for x_1 in x1:
             for x_2 in x2:
-                if 1 == np.sign(np.inner(self.w, pol.fit_transform(np.array([[x_1, x_2]])))):
-                # if 1 == np.sign(np.inner(self.w, pol.fit_transform(np.array([[1, x_1, x_2]])))):
+                if 1 == np.sign(np.inner(self.w, pol.fit_transform(np.array([[1, x_1, x_2]])))):
                     plt.plot(x_1, x_2, 'or', alpha=0.1)
                 else:
                     plt.plot(x_1, x_2, 'ob', alpha=0.1)
 
     def poly(self):
-        pol = PolynomialFeatures(self.polyDIM, include_bias=True)
-        m = [[x[1], x[2]] for x in self.training_matrix]
-        self.training_matrix = pol.fit_transform(m)
+        pol = PolynomialFeatures(self.polyDIM, include_bias=False)
+        # m = [[x[1], x[2]] for x in self.training_matrix]
+        self.training_matrix = pol.fit_transform(self.training_matrix)
+        print(self.training_matrix)
         self.DIM = len(self.training_matrix[0])
         self.w = np.random.rand(self.DIM)

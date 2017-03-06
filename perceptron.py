@@ -8,8 +8,6 @@ class Perceptron:
     various input sizes or dimensions. Displays using pyplot.
 
     Parameters:
-        dim: Dimension of data
-        num: number of datapoints
         grph: Graph to fit
     """
 
@@ -71,14 +69,14 @@ class Perceptron:
                 best_w = self.grph.w
             y_err_in.append(lowest_err)
             n = self.random_check()  # get a misclassed point
-            if n == -1 or t >= 99999:
+            if n == -1 or t >= 999:
                 has_err = False
             else:
                 self.grph.w = self.update(self.grph.y[n], self.grph.training_matrix[n])
             t += 1
-            print("t: {0}, Err_in: {1}%, w: {2}".format(t, lowest_err*100, best_w))
+            print("t: {0}, Err_in: {1}%, w: {2}".format(t, lowest_err * 100, best_w))
         # if self.grph.PLOT:
-            # self.grph.plot_g()  # In calling g() the 0th value is 1, corresponding to w_0
-            # self.grph.show_plot()  # and the last value is not used in calculation, so is set as 0
+            # self.grph.plot_g()
+            # self.grph.show_plot()
         self.grph.plotly_pocket(y_err_in)
         return t, best_w
