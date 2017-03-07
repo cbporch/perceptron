@@ -44,18 +44,16 @@ def linear_regression():
     w = np.inner(np.linalg.pinv(mat), per.grph.y)
     print(w)
     setattr(per.grph, 'w', w)
-    grph.plot_g()
+    # grph.plot_g()
     print(grph.e_in())
 
-
-# grph.show_plot()
 original = grph.training_matrix
-grph.poly()
-# linear_regression()
-setattr(per, 'grph', grph)
 grph.show_plot()  # clear graph
-per.pocket_fit()
-print("pocket done")
+grph.poly()
+linear_regression()
+setattr(per, 'grph', grph)
+# per.pocket_fit()
+# print("pocket done")
 setattr(grph, 'training_matrix', original)
 grph.shade()
 print("shade done")

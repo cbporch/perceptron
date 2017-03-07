@@ -123,7 +123,7 @@ class Graph:
                       yaxis=dict(title='$E_in$'),
                       )
         fig = dict(data=data, layout=layout)
-        plotly.plot(fig, filename='Problem 3.3 d 2d')
+        # plotly.plot(fig, filename='Problem 3.3 d 2d')
         plt.plot(t, e_in)
         axes = plt.gca()
         x1, x2, y1, y2 = plt.axis()
@@ -159,6 +159,7 @@ class Graph:
         for x_1 in x1:
             for x_2 in x2:
                 if 1 == np.sign(np.inner(self.w, pol.fit_transform(np.array([[1, x_1, x_2]])))):
+                # if 1 == np.sign(np.inner(self.w, np.array([[1, x_1, x_2]]))):
                     plt.plot(x_1, x_2, 'or', alpha=0.1)
                 else:
                     plt.plot(x_1, x_2, 'ob', alpha=0.1)
